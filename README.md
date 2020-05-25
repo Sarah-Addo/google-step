@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Google Student Training in Engineering Program
 
 This repo contains the projects you'll work on for the first half of STEP.
@@ -12,3 +13,6 @@ To get started:
 
 Then follow the on-screen instructions to set up your repo.
 # google-step
+=======
+"This repo contains Sarah Addo's portfolio and SPS projects."
+>>>>>>> 96c7d3b89111694588d23ad5dd3d9e29ed5f59d0

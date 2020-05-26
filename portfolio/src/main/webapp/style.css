@@ -3,14 +3,42 @@
     text-decoration: none;
 }
 #about-content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
   font-family: 'Courier New', Courier, monospace;
+}
+
+#highlight {
+    color: #ff8152;
 }
 
 #nav-bar {
     display: flex;
     justify-content: space-between;
     font-size: 36px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 650px;
 }
+
+#intro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 12%;
+}
+
+#intro-txt-header {
+    font-size: 200px;
+}
+
+#intro-txt {
+    color:#666666;
+    font-size: 36px;
+}
+
+#intro-img {
+    width: 30%;
+    height: 25%;
+}
+
+
+

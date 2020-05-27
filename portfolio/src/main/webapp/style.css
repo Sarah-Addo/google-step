@@ -1,13 +1,19 @@
+#about-content {
+  font-family: 'Courier New', Courier, monospace;
+  color: #666666;
+}
+
 #about-content a {
     color: #666666;
     text-decoration: none;
 }
-#about-content {
-  font-family: 'Courier New', Courier, monospace;
-}
 
 #highlight {
     color: #ff8152;
+}
+
+#go-blue {
+    color: #00274C;
 }
 
 #nav-bar {
@@ -24,6 +30,7 @@
     align-items: center;
     justify-content: center;
     margin-top: 12%;
+    margin-bottom: 15%;
 }
 
 #intro-txt-header {
@@ -31,7 +38,6 @@
 }
 
 #intro-txt {
-    color:#666666;
     font-size: 36px;
 }
 
@@ -39,6 +45,3 @@
     width: 30%;
     height: 25%;
 }
-
-
-

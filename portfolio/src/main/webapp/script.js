@@ -12,17 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+ var currSlide = 1;
 /**
- * Adds a random greeting to the page.
+ * Change the slide on the page
  */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+function changeSlide(nextOrPrev, numImgs) {
+  currSlide = currSlide + nextOrPrev;
+  if(currSlide < 1) {
+      currSlide = numImgs;
+  }
+  else if(currSlide > numImgs) {
+      currSlide = 1;
+  }
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  document.getElementById("slide-img").src = `images/img${currSlide}.jpg`;
+  document.getElementById("slide-number").innerHTML = `${currSlide},${numImgs}`;
 }

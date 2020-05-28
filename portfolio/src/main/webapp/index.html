@@ -8,7 +8,8 @@
 	<script src="script.js"></script>
 </head>
 
-<body>
+<!-- Load initial image for slideshow -->
+<body onload = "changeSlide(0,4)">
 	<div id="about-content">
 		<div id="nav-bar">
 			<a href="#about">about</a>
@@ -39,6 +40,16 @@
 					relax. I have also been playing a lot of <span id = "highlight">low-stakes poker</span> with friends
 					during quarantine!</p>
 				<img src = "images/cooking.jpg" id = "cooking-img"/>
+			</div>
+		</div>
+		<div id = "img-slideshow-section">
+			<div id = "slideshow-header">Where I Want to Be</div>
+			<div id = "slide">
+				<img id = "slide-img"/>
+				<div id = "slide-number"></div>
+				<div id = "slide-caption"></div>
+				<a class="prev" onclick="changeSlide(-1, 4)">&#10094;</a>
+  			<a class="next" onclick="changeSlide(1, 4)">&#10095;</a>
 			</div>
 		</div>
 	</div>

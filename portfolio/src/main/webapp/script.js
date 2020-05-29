@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   prev.onclick = () => {
-    changeSldie(-1);
+    changeSlide(-1);
   };
 
   next.onclick = () => {

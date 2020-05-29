@@ -12,20 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+document.addEventListener("DOMContentLoaded", function() {
+  const prev = document.getElementById("prev");
+  const next = document.getElementById("next");
+  
+  var currSlide = 1;
+  var numImgs = 3;
 
- var currSlide = 1;
-/**
- * Change the slide on the page
- */
-function changeSlide(nextOrPrev, numImgs) {
-  currSlide = currSlide + nextOrPrev;
-  if(currSlide < 1) {
+  prev.onclick = () => {
+    currSlide -= 1;
+    if(currSlide < 1) {
       currSlide = numImgs;
-  }
-  else if(currSlide > numImgs) {
-      currSlide = 1;
-  }
+    }
+    document.getElementById("slide-img").src = `images/img${currSlide}.jpg`;
+    document.getElementById("slide-number").innerHTML = `${currSlide},${numImgs}`;
+  };
 
-  document.getElementById("slide-img").src = `images/img${currSlide}.jpg`;
-  document.getElementById("slide-number").innerHTML = `${currSlide},${numImgs}`;
-}
+  next.onclick = () => {
+    currSlide += 1;
+    if(currSlide > numImgs) {
+      currSlide = 1;
+    }
+    document.getElementById("slide-img").src = `images/img${currSlide}.jpg`;
+    document.getElementById("slide-number").innerHTML = `${currSlide},${numImgs}`;
+  };
+});

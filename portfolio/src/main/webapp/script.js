@@ -26,11 +26,11 @@ document.addEventListener("DOMContentLoaded", function() {
     if(currSlide < 1) {
       currSlide = numImgs;
     }
-    if(currSlide > numImgs) {
+    else if(currSlide > numImgs) {
       currSlide = 1;
     }
     document.getElementById("slide-img").src = `images/img${currSlide}.jpg`;
-    document.getElementById("slide-number").innerHTML = `${currSlide},${numImgs}`;
+    document.getElementById("slide-number").textContent = `${currSlide} of ${numImgs}`;
   }
 
   prev.onclick = () => {
@@ -43,25 +43,25 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function createSlide(currSlide, numImgs) {
-  let slide = document.getElementById("slide");
+  const slide = document.getElementById("slide");
 
-  let prev = document.createElement("a");
+  const prev = document.createElement("a");
   prev.setAttribute("id", "prev");
-  prev.innerHTML = "❮";
+  prev.textContent = "❮";
   slide.appendChild(prev);
 
-  let next = document.createElement("a");
+  const next = document.createElement("a");
   next.setAttribute("id", "next");
-  next.innerHTML = "❯";
+  next.textContent = "❯";
   slide.appendChild(next);
 
-  let img = document.createElement("img");
+  const img = document.createElement("img");
   img.setAttribute("src", `images/img${currSlide}.jpg`)
   img.setAttribute("id", "slide-img");
   slide.appendChild(img);
 
-  let slideNum = document.createElement("div");
-  slideNum.innerHTML = `${currSlide},${numImgs}`;
+  const slideNum = document.createElement("div");
+  slideNum.textContent = `${currSlide} of ${numImgs}`;
   slideNum.setAttribute("id", "slide-number");
   slide.appendChild(slideNum);
 }

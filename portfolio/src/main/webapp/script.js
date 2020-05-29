@@ -12,28 +12,57 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() { 
+  let currSlide = 1;
+  let numImgs = 3;
+
+  createSlide(currSlide, numImgs);
+
   const prev = document.getElementById("prev");
   const next = document.getElementById("next");
-  
-  var currSlide = 1;
-  var numImgs = 3;
 
-  prev.onclick = () => {
-    currSlide -= 1;
+  function changeSlide (direction) {
+    currSlide += direction;
     if(currSlide < 1) {
       currSlide = numImgs;
     }
-    document.getElementById("slide-img").src = `images/img${currSlide}.jpg`;
-    document.getElementById("slide-number").innerHTML = `${currSlide},${numImgs}`;
-  };
-
-  next.onclick = () => {
-    currSlide += 1;
     if(currSlide > numImgs) {
       currSlide = 1;
     }
     document.getElementById("slide-img").src = `images/img${currSlide}.jpg`;
     document.getElementById("slide-number").innerHTML = `${currSlide},${numImgs}`;
+  }
+
+  prev.onclick = () => {
+    changeSldie(-1);
+  };
+
+  next.onclick = () => {
+    changeSlide(1);
   };
 });
+
+function createSlide(currSlide, numImgs) {
+  let slide = document.getElementById("slide");
+
+  let prev = document.createElement("a");
+  prev.setAttribute("id", "prev");
+  prev.innerHTML = "❮";
+  slide.appendChild(prev);
+
+  let next = document.createElement("a");
+  next.setAttribute("id", "next");
+  next.innerHTML = "❯";
+  slide.appendChild(next);
+
+  let img = document.createElement("img");
+  img.setAttribute("src", `images/img${currSlide}.jpg`)
+  img.setAttribute("id", "slide-img");
+  slide.appendChild(img);
+
+  let slideNum = document.createElement("div");
+  slideNum.innerHTML = `${currSlide},${numImgs}`;
+  slideNum.setAttribute("id", "slide-number");
+  slide.appendChild(slideNum);
+}
+

@@ -12,57 +12,57 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-document.addEventListener("DOMContentLoaded", function() { 
-  let currSlide = 1;
-  let numImgs = 3;
-
-  createSlide(currSlide, numImgs);
-
-  const prev = document.getElementById("prev");
-  const next = document.getElementById("next");
-
-  function changeSlide (direction) {
-    currSlide += direction;
-    if(currSlide < 1) {
-      currSlide = numImgs;
-    }
-    else if(currSlide > numImgs) {
-      currSlide = 1;
-    }
-    document.getElementById("slide-img").src = `images/img${currSlide}.jpg`;
-    document.getElementById("slide-number").textContent = `${currSlide} of ${numImgs}`;
-  }
-
-  prev.onclick = () => {
-    changeSlide(-1);
-  };
-
-  next.onclick = () => {
-    changeSlide(1);
-  };
+document.addEventListener("DOMContentLoaded", function() {
+  const slides = new Slides(document.getElementById("slide"));
 });
 
-function createSlide(currSlide, numImgs) {
-  const slide = document.getElementById("slide");
+class Slides {
+  constructor(slideElement) {
+    this.currSlide = 1;
+    this.numImgs = 3;
+    this.slide = slideElement;
 
-  const prev = document.createElement("a");
-  prev.setAttribute("id", "prev");
-  prev.textContent = "❮";
-  slide.appendChild(prev);
+    this.prev = document.createElement('a');
+    this.prev.setAttribute("id", "prev");
+    this.prev.textContent = "❮";
+    this.slide.appendChild(this.prev);
 
-  const next = document.createElement("a");
-  next.setAttribute("id", "next");
-  next.textContent = "❯";
-  slide.appendChild(next);
+    this.next = document.createElement('a');
+    this.next.setAttribute("id", "next");
+    this.next.textContent = "❯";
+    this.slide.appendChild(this.next);
 
-  const img = document.createElement("img");
-  img.setAttribute("src", `images/img${currSlide}.jpg`)
-  img.setAttribute("id", "slide-img");
-  slide.appendChild(img);
+    this.img = document.createElement("img");
+    this.img.setAttribute("src", `images/img${this.currSlide}.jpg`)
+    this.img.setAttribute("id", "slide-img");
+    this.slide.appendChild(this.img);
 
-  const slideNum = document.createElement("div");
-  slideNum.textContent = `${currSlide} of ${numImgs}`;
-  slideNum.setAttribute("id", "slide-number");
-  slide.appendChild(slideNum);
+    this.slideNum = document.createElement("div");
+    this.slideNum.textContent = `${this.currSlide} of ${this.numImgs}`;
+    this.slideNum.setAttribute("id", "slide-number");
+    this.slide.appendChild(this.slideNum);
+
+    this.prev.onclick = () => {
+      this.changeSlide(-1);
+    }
+
+    this.next.onclick = () => {
+      this.changeSlide(1);
+    }
+  }
+
+  changeSlide (direction) {
+    this.currSlide += direction;
+    if(this.currSlide < 1) {
+      this.currSlide = numImgs;
+    } else if(this.currSlide > this.numImgs) {
+      this.currSlide = 1;
+    }
+    this.updateSlideContent();
+  }
+
+  updateSlideContent() {
+    document.getElementById("slide-img").src = `images/img${this.currSlide}.jpg`;
+    document.getElementById("slide-number").textContent = `${this.currSlide} of ${this.numImgs}`;
+  }
 }
-

@@ -85,6 +85,8 @@
   margin-top: 10px;
 }
 #slide {
+  display: flex;
+  justify-content: space-between;
   height: 80%;
   width: 65%;
   margin: 0 auto;
@@ -100,17 +102,16 @@
   font-size: 20px;
   padding: 8px 12px;
   position: absolute;
-  top: 205%;
 }
 
 #prev,
 #next {
     cursor: pointer;
     position: absolute;
-    top: 255%;
     font-size: 20px;
     font-weight: bold;
     color: #ffffff;
+    margin-top: 20%;
 }
 
 #next {

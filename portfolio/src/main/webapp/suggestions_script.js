@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-document.addEventListener("DOMContentLoaded", function() {
-    fetch('/data').then(response => response.text()).then((json) => {
+document.addEventListener("DOMContentLoaded", async function() {
+    let json = await fetch('/data');
     console.log(json);
     document.getElementById('comment-area').innerText = json;
   });
-});

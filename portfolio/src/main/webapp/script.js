@@ -12,17 +12,57 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * Adds a random greeting to the page.
- */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+document.addEventListener("DOMContentLoaded", function() {
+  const slides = new Slides(document.getElementById("slide"));
+});
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+class Slides {
+  constructor(slideElement) {
+    this.currSlide = 1;
+    this.numImgs = 3;
+    this.slide = slideElement;
 
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+    this.prev = document.createElement('a');
+    this.prev.setAttribute("id", "prev");
+    this.prev.textContent = "❮";
+    this.slide.appendChild(this.prev);
+
+    this.next = document.createElement('a');
+    this.next.setAttribute("id", "next");
+    this.next.textContent = "❯";
+    this.slide.appendChild(this.next);
+
+    this.img = document.createElement("img");
+    this.img.setAttribute("src", `images/img${this.currSlide}.jpg`)
+    this.img.setAttribute("id", "slide-img");
+    this.slide.appendChild(this.img);
+
+    this.slideNum = document.createElement("div");
+    this.slideNum.textContent = `${this.currSlide} of ${this.numImgs}`;
+    this.slideNum.setAttribute("id", "slide-number");
+    this.slide.appendChild(this.slideNum);
+
+    this.prev.onclick = () => {
+      this.changeSlide(-1);
+    }
+
+    this.next.onclick = () => {
+      this.changeSlide(1);
+    }
+  }
+
+  changeSlide (direction) {
+    this.currSlide += direction;
+    if(this.currSlide < 1) {
+      this.currSlide = numImgs;
+    } else if(this.currSlide > this.numImgs) {
+      this.currSlide = 1;
+    }
+    this.updateSlideContent();
+  }
+
+  updateSlideContent() {
+    document.getElementById("slide-img").src = `images/img${this.currSlide}.jpg`;
+    document.getElementById("slide-number").textContent = `${this.currSlide} of ${this.numImgs}`;
+  }
 }

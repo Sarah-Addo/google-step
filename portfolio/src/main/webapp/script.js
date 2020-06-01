@@ -27,15 +27,15 @@ class Slides {
     this.prev.textContent = "❮";
     this.slide.appendChild(this.prev);
 
-    this.next = document.createElement('a');
-    this.next.setAttribute("id", "next");
-    this.next.textContent = "❯";
-    this.slide.appendChild(this.next);
-
     this.img = document.createElement("img");
     this.img.setAttribute("src", `images/img${this.currSlide}.jpg`)
     this.img.setAttribute("id", "slide-img");
     this.slide.appendChild(this.img);
+
+    this.next = document.createElement('a');
+    this.next.setAttribute("id", "next");
+    this.next.textContent = "❯";
+    this.slide.appendChild(this.next);
 
     this.slideNum = document.createElement("div");
     this.slideNum.textContent = `${this.currSlide} of ${this.numImgs}`;

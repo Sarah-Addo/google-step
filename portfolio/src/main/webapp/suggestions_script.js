@@ -13,7 +13,8 @@
 // limitations under the License.
 
 document.addEventListener("DOMContentLoaded", function() {
-    fetch('/data').then(response => response.text()).then((quote) => {
-    document.getElementById('comment-area').innerText = quote;
+    fetch('/data').then(response => response.text()).then((json) => {
+    console.log(json);
+    document.getElementById('comment-area').innerText = json;
   });
 });

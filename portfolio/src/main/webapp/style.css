@@ -121,3 +121,13 @@
 #prev {
     left: 10%;
 }
+
+#suggestions-content {
+  font-family: 'Courier New', Courier, monospace;
+  color: #666666;
+}
+
+#suggestions-content a {
+  color: #666666;
+  text-decoration: none;
+}

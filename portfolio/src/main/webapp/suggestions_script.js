@@ -13,7 +13,17 @@
 // limitations under the License.
 
 document.addEventListener("DOMContentLoaded", async function() {
-    let json = await fetch('/data');
-    console.log(json);
-    document.getElementById('comment-area').innerText = json;
+    let response = await fetch('/comment-entry');
+    let json = await response.json();
+    const area = document.getElementById('comment-area');
+    json.comments.forEach((line) => {
+        area.appendChild(createListElement(line));
+    });
   });
+
+  /** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}

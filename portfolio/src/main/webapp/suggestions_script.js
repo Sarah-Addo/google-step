@@ -13,17 +13,38 @@
 // limitations under the License.
 
 document.addEventListener("DOMContentLoaded", async function() {
-    let response = await fetch('/comment-entry');
-    let json = await response.json();
-    const area = document.getElementById('comment-area');
-    json.comments.forEach((line) => {
-        area.appendChild(createListElement(line));
+    let response = await fetch('/list-comments');
+    let comments = await response.json();
+    const commentArea = document.getElementById('comment-area');
+    comments.forEach((comment) => {
+      commentArea.appendChild(createComment(comment));
     });
   });
 
-  /** Creates an <li> element containing text. */
-function createListElement(text) {
-  const liElement = document.createElement('li');
-  liElement.innerText = text;
-  return liElement;
+function createComment(comment) {
+  const commentElement = document.createElement('li');
+  commentElement.className = 'comment';
+
+  const commentTextElement = document.createElement('span');
+  commentTextElement.innerText = comment.commentText;
+
+  const deleteButtonElement = document.createElement('button');
+  deleteButtonElement.innerText = 'Delete';
+  deleteButtonElement.addEventListener('click', () => {
+    deleteComment(comment);
+
+    // Remove the comment from the DOM.
+    commentElement.remove();
+  });
+
+  commentElement.appendChild(commentTextElement);
+  commentElement.appendChild(deleteButtonElement);
+  return commentElement;
+}
+
+/** Tells the server to delete the comment. */
+function deleteComment(comment) {
+  const params = new URLSearchParams();
+  params.append('id', comment.id);
+  fetch('/delete-comment', {method: 'POST', body: params});
 }

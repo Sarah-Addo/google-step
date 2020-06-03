@@ -29,31 +29,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
-@WebServlet("/list-comments")
-public class DataServlet extends HttpServlet {
+/** Servlet that adds a comment to datastorea */
+@WebServlet("/add-comment")
+public class AddCommentServlet extends HttpServlet {
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Comment");
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    // Get the input from the form.
+    String newComment = request.getParameter("comment");
+
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("commentText", newComment);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
+    datastore.put(commentEntity);
 
-    ArrayList<Comment> commentList = new ArrayList<>();
-    for (Entity entity : results.asIterable()) {
-      long id = entity.getKey().getId();
-      String commentText = (String) entity.getProperty("commentText");
-
-      Comment newComment = new Comment(id, commentText);
-      commentList.add(newComment);
-    }
-    
-    // Send the JSON as the response
-    response.setContentType("application/json;");
-    String json = new Gson().toJson(commentList);
-
-    response.getWriter().println(json);
-  } 
-
+    // Redirect back to the HTML page.
+    response.sendRedirect("/suggestions.html");
+  }
 }

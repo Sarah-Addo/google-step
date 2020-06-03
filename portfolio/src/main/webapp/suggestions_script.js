@@ -15,7 +15,7 @@
 document.addEventListener("DOMContentLoaded", async function() {
     let response = await fetch('/list-comments');
     let comments = await response.json();
-    const commentArea = document.getElementById('comment-area');
+    const commentArea = document.getElementById('comment-list');
     comments.forEach((comment) => {
       commentArea.appendChild(createComment(comment));
     });

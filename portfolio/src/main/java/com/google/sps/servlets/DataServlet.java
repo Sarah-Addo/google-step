@@ -29,13 +29,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that returns current list of comments */
 @WebServlet("/list-comments")
 public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Comment");
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
@@ -44,11 +44,12 @@ public class DataServlet extends HttpServlet {
     for (Entity entity : results.asIterable()) {
       long id = entity.getKey().getId();
       String commentText = (String) entity.getProperty("commentText");
+      long timestamp = (long) entity.getProperty("timestamp");
 
-      Comment newComment = new Comment(id, commentText);
+      Comment newComment = new Comment(id, commentText, timestamp);
       commentList.add(newComment);
     }
-    
+
     // Send the JSON as the response
     response.setContentType("application/json;");
     String json = new Gson().toJson(commentList);

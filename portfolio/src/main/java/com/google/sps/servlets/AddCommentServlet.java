@@ -27,9 +27,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 
-/** Servlet that adds a comment to datastorea */
+/** Servlet that adds a comment to datastore */
 @WebServlet("/add-comment")
 public class AddCommentServlet extends HttpServlet {
 
@@ -38,9 +37,11 @@ public class AddCommentServlet extends HttpServlet {
 
     // Get the input from the form.
     String newComment = request.getParameter("comment");
+    long timestamp = System.currentTimeMillis();
 
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("commentText", newComment);
+    commentEntity.setProperty("timestamp", timestamp);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);

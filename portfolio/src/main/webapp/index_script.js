@@ -54,7 +54,7 @@ class Slides {
   changeSlide (direction) {
     this.currSlide += direction;
     if(this.currSlide < 1) {
-      this.currSlide = numImgs;
+      this.currSlide = this.numImgs;
     } else if(this.currSlide > this.numImgs) {
       this.currSlide = 1;
     }

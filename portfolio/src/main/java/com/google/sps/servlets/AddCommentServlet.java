@@ -27,34 +27,28 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 
-/** Servlet that returns current list of comments */
-@WebServlet("/list-comments")
-public class DataServlet extends HttpServlet {
+/** Servlet that adds a comment to datastore */
+@WebServlet("/add-comment")
+public class AddCommentServlet extends HttpServlet {
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Comment").addSort("timestampMillis", SortDirection.DESCENDING);
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
+    // Get the input from the form.
+    String newComment = request.getParameter("comment");
+    long timestampMillis = System.currentTimeMillis();
 
-    ArrayList<Comment> commentList = new ArrayList<>();
-    for (Entity entity : results.asIterable()) {
-      long id = entity.getKey().getId();
-      String commentText = (String) entity.getProperty("commentText");
-      long timestampMillis = (long) entity.getProperty("timestampMillis");
+    if(newComment != null && !newComment.isEmpty()) {
+      Entity commentEntity = new Entity("Comment");
+      commentEntity.setProperty("commentText", newComment);
+      commentEntity.setProperty("timestampMillis", timestampMillis);
 
-      Comment newComment = new Comment(id, commentText, timestampMillis);
-      commentList.add(newComment);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(commentEntity);
     }
 
-    // Send the JSON as the response
-    response.setContentType("application/json;");
-    String json = new Gson().toJson(commentList);
-
-    response.getWriter().println(json);
-  } 
-
+    // Redirect back to the HTML page.
+    response.sendRedirect("/suggestions.html");
+  }
 }

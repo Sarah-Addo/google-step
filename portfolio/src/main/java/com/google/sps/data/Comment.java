@@ -7,11 +7,11 @@ public class Comment {
 
   private final long id;
   private final String commentText;
-  private final long timestamp;
+  private final long timestampMillis;
 
-  public Comment(long id, String commentText, long timestamp) {
+  public Comment(long id, String commentText, long timestampMillis) {
     this.id = id;
     this.commentText = commentText;
-    this.timestamp = timestamp;
+    this.timestampMillis = timestampMillis;
   }
 }

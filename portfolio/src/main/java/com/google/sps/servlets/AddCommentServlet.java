@@ -37,14 +37,16 @@ public class AddCommentServlet extends HttpServlet {
 
     // Get the input from the form.
     String newComment = request.getParameter("comment");
-    long timestamp = System.currentTimeMillis();
+    long timestampMillis = System.currentTimeMillis();
 
-    Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("commentText", newComment);
-    commentEntity.setProperty("timestamp", timestamp);
+    if(newComment != null && !newComment.isEmpty()) {
+      Entity commentEntity = new Entity("Comment");
+      commentEntity.setProperty("commentText", newComment);
+      commentEntity.setProperty("timestampMillis", timestampMillis);
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(commentEntity);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(commentEntity);
+    }
 
     // Redirect back to the HTML page.
     response.sendRedirect("/suggestions.html");

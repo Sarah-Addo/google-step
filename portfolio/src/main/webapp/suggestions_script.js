@@ -26,10 +26,10 @@ function createComment(comment) {
   commentElement.className = 'comment';
 
   const commentTextElement = document.createElement('span');
-  commentTextElement.innerText = comment.commentText;
+  commentTextElement.textContent = comment.commentText;
 
   const deleteButtonElement = document.createElement('button');
-  deleteButtonElement.innerText = 'Delete';
+  deleteButtonElement.textContent = 'Delete';
   deleteButtonElement.addEventListener('click', () => {
     deleteComment(comment);
 

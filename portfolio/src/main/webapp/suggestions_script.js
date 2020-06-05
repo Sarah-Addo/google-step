@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
+ 
 document.addEventListener("DOMContentLoaded", async function() {
     let response = await fetch('/list-comments');
     let comments = await response.json();
@@ -20,28 +20,34 @@ document.addEventListener("DOMContentLoaded", async function() {
       commentArea.appendChild(createComment(comment));
     });
   });
-
+ 
 function createComment(comment) {
-  const commentElement = document.createElement('li');
-  commentElement.className = 'comment';
-
-  const commentTextElement = document.createElement('span');
+  const commentElement = document.createElement("div");
+  commentElement.classList.add("comment");
+ 
+  const commentNameElement = document.createElement('div');
+  commentNameElement.classList.add("comment-name");
+  commentNameElement.textContent = comment.name;
+  const commentTextElement = document.createElement('div');
+  commentTextElement.classList.add("comment-text");
   commentTextElement.textContent = comment.commentText;
-
-  const deleteButtonElement = document.createElement('button');
-  deleteButtonElement.textContent = 'Delete';
+ 
+  const deleteButtonElement = document.createElement('div');
+  deleteButtonElement.classList.add("delete-button");
+  deleteButtonElement.textContent = 'X';
   deleteButtonElement.addEventListener('click', () => {
     deleteComment(comment);
-
+ 
     // Remove the comment from the DOM.
     commentElement.remove();
   });
-
+ 
+  commentElement.appendChild(commentNameElement);
   commentElement.appendChild(commentTextElement);
   commentElement.appendChild(deleteButtonElement);
   return commentElement;
 }
-
+ 
 /** Tells the server to delete the comment. */
 function deleteComment(comment) {
   const params = new URLSearchParams();

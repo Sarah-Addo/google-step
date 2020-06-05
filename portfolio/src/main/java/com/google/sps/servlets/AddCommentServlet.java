@@ -36,11 +36,18 @@ public class AddCommentServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     // Get the input from the form.
+    String newName;
+    if(request.getParameter("name") == null || request.getParameter("name").isEmpty()) {
+        newName = "Anonymous:";
+    } else {
+        newName = request.getParameter("name") + ":";
+    } 
     String newComment = request.getParameter("comment");
     long timestampMillis = System.currentTimeMillis();
 
     if(newComment != null && !newComment.isEmpty()) {
       Entity commentEntity = new Entity("Comment");
+      commentEntity.setProperty("name", newName);
       commentEntity.setProperty("commentText", newComment);
       commentEntity.setProperty("timestampMillis", timestampMillis);
 

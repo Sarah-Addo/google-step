@@ -186,7 +186,7 @@
   border-color: #ccc;
   width: 50%;
   height: 515px;
-  overflow: hidden;
+  overflow-y: auto;
   position: relative;
 }
 

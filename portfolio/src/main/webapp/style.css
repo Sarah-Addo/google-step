@@ -178,6 +178,7 @@
   font-family:'Courier New', Courier, monospace;
   color: #ffffff;
   font-size: 16px;
+  cursor: pointer;
 }
 
 #comment-list {
@@ -190,7 +191,7 @@
   position: relative;
 }
 
-#comment {
+.comment{
   border-bottom: 1px solid #ccc;
   display: flex;
   padding: 10px 5px 10px 5px;
@@ -198,14 +199,12 @@
   height: 16px;
 }
 
-#comment-name {
+.comment-name {
     color: #ff8152;
     padding-right: 10px;
 }
 
-#delete-button {
-  border: 0px;
-  border-radius: 4px;
+.delete-button {
   font-family:'Courier New', Courier, monospace;
   color: #ff8152;
   position:absolute;

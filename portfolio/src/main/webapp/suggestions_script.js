@@ -15,28 +15,26 @@
 document.addEventListener("DOMContentLoaded", async function() {
     let response = await fetch('/list-comments');
     let comments = await response.json();
-    console.log(comments);
     const commentArea = document.getElementById('comment-list');
     comments.forEach((comment) => {
-        console.log(comment);
       commentArea.appendChild(createComment(comment));
     });
   });
  
 function createComment(comment) {
   const commentElement = document.createElement("div");
-  commentElement.setAttribute("id", "comment");
+  commentElement.classList.add("comment");
  
   const commentNameElement = document.createElement('div');
-  commentNameElement.setAttribute("id", "comment-name");
+  commentNameElement.classList.add("comment-name");
   commentNameElement.textContent = comment.name;
   const commentTextElement = document.createElement('div');
-  commentTextElement.setAttribute("id", "comment-text");
+  commentTextElement.classList.add("comment-text");
   commentTextElement.textContent = comment.commentText;
  
   const deleteButtonElement = document.createElement('div');
-  deleteButtonElement.setAttribute("id", "delete-button");
-  deleteButtonElement.innerText = 'X';
+  deleteButtonElement.classList.add("delete-button");
+  deleteButtonElement.textContent = 'X';
   deleteButtonElement.addEventListener('click', () => {
     deleteComment(comment);
  

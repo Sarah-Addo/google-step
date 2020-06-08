@@ -187,7 +187,8 @@
   border-color: #ccc;
   width: 50%;
   height: 515px;
-  overflow-y: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
   position: relative;
 }
 
@@ -211,4 +212,28 @@
   right: 10px;
   font-size: 20px;
   cursor: pointer;
+}
+
+#map-content {
+  font-family: 'Courier New', Courier, monospace;
+  color: #666666;
+}
+ 
+#map-content a {
+  color: #666666;
+  text-decoration: none;
+}
+
+#map-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 2%;
+  height: 400px;
+  width: 100%;
+}
+
+#map {
+  border: 1px solid #ccc;
+  height: 100%;
+  width: 90%;
 }

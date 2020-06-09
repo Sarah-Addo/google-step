@@ -237,3 +237,10 @@
   height: 100%;
   width: 90%;
 }
+
+#map-header {
+  display: flex;
+  justify-content: center;
+  margin: 2% 0% 2% 0%;
+  font-size: 36px;
+}

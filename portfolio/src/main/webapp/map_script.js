@@ -12,97 +12,96 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 document.addEventListener("DOMContentLoaded", function() {
-  const map = new Map(document.getElementById('map'));
+  const map = new MyMap(document.getElementById('map'));
 });
 
-class Map {
-    constructor(mapElement) {
-  		this.map = new google.maps.Map(mapElement,
-    		{ center: { lat: 37.422403, lng: -122.088073 }, zoom: 11 });
+class MyMap {
+  constructor(mapElement) {
+    this.map = new google.maps.Map(mapElement,
+      { center: { lat: 37.422403, lng: -122.088073 }, zoom: 11 });
 
-  		this.infoWindow = new google.maps.InfoWindow;
+    this.infoWindow = new google.maps.InfoWindow;
 
-  		// Try HTML5 geolocation.
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition((position) => {
-					this.pos = {
-						lat: position.coords.latitude,
-						lng: position.coords.longitude
-					};
-					this.map.setCenter(this.pos);
-					this.getGymResults(this.pos);
-				}, () => {
-					this.handleLocationError(/*browserHasGeolocation*/ true, this.infoWindow, this.map.getCenter());
-				});
-			} else {
-				// Browser doesn't support Geolocation
-				this.handleLocationError(false, this.infoWindow, this.map.getCenter());
-			}
+    // Try HTML5 geolocation.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        this.map.setCenter(this.pos);
+        this.getGymResults(this.pos);
+      }, () => {
+        this.handleLocationError(/*browserHasGeolocation*/ true, this.infoWindow, this.map.getCenter());
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      this.handleLocationError(false, this.infoWindow, this.map.getCenter());
     }
-	
-	handleLocationError(browserHasGeolocation, infoWindow, pos) {
-  	this.infoWindow.setPosition(pos);
-  	this.infoWindow.setContent(browserHasGeolocation ?
-    	'Error: The Geolocation service failed.' :
-    	'Error: Your browser doesn\'t support geolocation.');
-  	this.infoWindow.open(this.map);
-	}
+  }
 
-	getGymResults(pos) {
-  	const request = {
-    	location: pos,
-    	radius: '2000',
-    	query: 'gym'
-  	};
-  	
-		let service = new google.maps.places.PlacesService(this.map);
-  	service.textSearch(request, this.callback);
-	}
+  handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    this.infoWindow.setPosition(pos);
+    this.infoWindow.setContent(browserHasGeolocation ?
+      'Error: The Geolocation service failed.' :
+      'Error: Your browser doesn\'t support geolocation.');
+    this.infoWindow.open(this.map);
+  }
 
-	callback(results, status) {
-  	if (status == google.maps.places.PlacesServiceStatus.OK) {
-    	let maxPlaces = Math.min(results.length, 15);
-    	const placesArea = document.getElementById("results-container");
+  getGymResults(pos) {
+    const request = {
+      location: pos,
+      radius: '2000',
+      query: 'gym'
+    };
 
-    	for (let i = 0; i < maxPlaces; i++) {
-				console.log(results[i]);
-      	placesArea.appendChild(this.addPlace(results[i]));
-      	this.createMarker(results[i]);
-    	}
-  	}
-	}
+    let service = new google.maps.places.PlacesService(this.map);
+    service.textSearch(request, this.callback.bind(this));
+  }
 
-	addPlace(place) {
-  	const placeElement = document.createElement("div");
-  	placeElement.classList.add("place");
+  callback(results, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      let maxPlaces = Math.min(results.length, 15);
+      const placesArea = document.getElementById("results-container");
 
-		const placeNameElement = document.createElement('div');
-		placeNameElement.classList.add("place-name");
-		placeNameElement.textContent = place.name;
+      for (let i = 0; i < maxPlaces; i++) {
+        let place = results[i];
+        placesArea.appendChild(this.addPlace(place));
+        this.createMarker(place);
+      }
+    }
+  }
 
-		const placeAddressElement = document.createElement('div');
-		placeAddressElement.classList.add("place-address");
-		placeAddressElement.textContent = place.formatted_address;
+  addPlace(place) {
+    const placeElement = document.createElement("div");
+    placeElement.classList.add("place");
 
-		const placeRatingElement = document.createElement('div');
-		placeRatingElement.classList.add("place-rating");
-		placeRatingElement.textContent = place.rating;
+    const placeNameElement = document.createElement('div');
+    placeNameElement.classList.add("place-name");
+    placeNameElement.textContent = place.name;
 
-		placeElement.appendChild(placeNameElement);
-		placeElement.appendChild(placeAddressElement);
-		placeElement.appendChild(placeRatingElement);
+    const placeAddressElement = document.createElement('div');
+    placeAddressElement.classList.add("place-address");
+    placeAddressElement.textContent = place.formatted_address;
 
-	console.log(placeElement);
-		return placeElement;
-	}
+    const placeRatingElement = document.createElement('div');
+    placeRatingElement.classList.add("place-rating");
+    placeRatingElement.textContent = place.rating;
 
-	createMarker(place) {
-		marker = new google.maps.Marker({
-			map: map,
-			title: place.name,
-			animation: google.maps.Animation.DROP,
-			position: place.geometry.location,
-		});
-	}
+    placeElement.appendChild(placeNameElement);
+    placeElement.appendChild(placeAddressElement);
+    placeElement.appendChild(placeRatingElement);
+
+    return placeElement;
+  }
+
+  createMarker(place) {
+    const marker = new google.maps.Marker({
+      map: this.map,
+      title: place.name,
+      animation: google.maps.Animation.DROP,
+      position: place.geometry.location,
+    });
+  }
 
 }

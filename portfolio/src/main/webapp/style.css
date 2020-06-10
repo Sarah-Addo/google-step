@@ -244,3 +244,21 @@
   margin: 2% 0% 2% 0%;
   font-size: 36px;
 }
+
+#results-container {
+  border: 1px 1px 0px 1px;
+  margin: 20px auto 20px auto;
+  border-style: double;
+  border-color: #ccc;
+  width: 70%;
+  height: 515px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.place {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 5px 10px 5px;
+  width: 99%;
+}

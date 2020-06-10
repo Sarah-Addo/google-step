@@ -78,19 +78,17 @@ class MyMap {
 
     const placeNameElement = document.createElement('div');
     placeNameElement.classList.add("place-name");
-    placeNameElement.textContent = place.name;
+    const placeNameSpanElement = document.createElement('span');
+    placeNameSpanElement.setAttribute('id', 'highlight');
+    placeNameSpanElement.textContent = `${place.name} `;
+    placeNameElement.appendChild(placeNameSpanElement);
 
     const placeAddressElement = document.createElement('div');
     placeAddressElement.classList.add("place-address");
     placeAddressElement.textContent = place.formatted_address;
 
-    const placeRatingElement = document.createElement('div');
-    placeRatingElement.classList.add("place-rating");
-    placeRatingElement.textContent = place.rating;
-
     placeElement.appendChild(placeNameElement);
     placeElement.appendChild(placeAddressElement);
-    placeElement.appendChild(placeRatingElement);
 
     return placeElement;
   }

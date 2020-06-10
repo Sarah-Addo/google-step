@@ -63,13 +63,11 @@ function getGymResults(pos) {
 
 function callback(results, status) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
-    let max;
+    let max = 15;
     const placesArea = document.getElementById("results-container");
 
-    if (results.length < 10) {
+    if (results.length < 15) {
       max = results.length;
-    } else {
-      max = 10;
     }
 
     for (let i = 0; i < max; i++) {
@@ -86,21 +84,19 @@ function addPlace(place) {
 
   const placeNameElement = document.createElement('div');
   placeNameElement.classList.add("place-name");
-  placeNameElement.textContent = place.name;
+  const placeNameSpanElement = document.createElement('span');
+  placeNameSpanElement.setAttribute('id', 'highlight');
+  placeNameSpanElement.textContent = `${place.name} `;
+  placeNameElement.appendChild(placeNameSpanElement);
 
   const placeAddressElement = document.createElement('div');
   placeAddressElement.classList.add("place-address");
   placeAddressElement.textContent = place.formatted_address;
 
-  const placeRatingElement = document.createElement('div');
-  placeRatingElement.classList.add("place-rating");
-  placeRatingElement.textContent = place.rating;
-
   placeElement.appendChild(placeNameElement);
   placeElement.appendChild(placeAddressElement);
-  placeElement.appendChild(placeRatingElement);
 
-  return placeElement;
+  return placeElement;git
 }
 
 function createMarker(place) {

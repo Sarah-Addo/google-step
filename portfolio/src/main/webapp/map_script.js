@@ -11,13 +11,95 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
- 
 document.addEventListener("DOMContentLoaded", function() {
-    createMap();
-    });
+  const map = new MyMap(document.getElementById('map'));
+});
 
-function createMap() {
-    const map = new google.maps.Map(
-      document.getElementById('map'),
-      {center: {lat: 37.422403, lng: -122.088073}, zoom: 15});
+class MyMap {
+  constructor(mapElement) {
+    this.map = new google.maps.Map(mapElement,
+      { center: { lat: 37.422403, lng: -122.088073 }, zoom: 11 });
+
+    this.infoWindow = new google.maps.InfoWindow;
+
+    // Try HTML5 geolocation.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        this.map.setCenter(this.pos);
+        this.getGymResults(this.pos);
+      }, () => {
+        this.handleLocationError(/*browserHasGeolocation*/ true, this.infoWindow, this.map.getCenter());
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      this.handleLocationError(false, this.infoWindow, this.map.getCenter());
+    }
+  }
+
+  handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    this.infoWindow.setPosition(pos);
+    this.infoWindow.setContent(browserHasGeolocation ?
+      'Error: The Geolocation service failed.' :
+      'Error: Your browser doesn\'t support geolocation.');
+    this.infoWindow.open(this.map);
+  }
+
+  getGymResults(pos) {
+    const request = {
+      location: pos,
+      radius: '2000',
+      query: 'gym'
+    };
+
+    let service = new google.maps.places.PlacesService(this.map);
+    service.textSearch(request, this.callback.bind(this));
+  }
+
+  callback(results, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      let maxPlaces = Math.min(results.length, 15);
+      const placesArea = document.getElementById("results-container");
+
+      for (let i = 0; i < maxPlaces; i++) {
+        let place = results[i];
+        placesArea.appendChild(this.addPlace(place));
+        this.createMarker(place);
+      }
+    }
+  }
+
+  addPlace(place) {
+    const placeElement = document.createElement("div");
+    placeElement.classList.add("place");
+
+    const placeNameElement = document.createElement('div');
+    placeNameElement.classList.add("place-name");
+    const placeNameSpanElement = document.createElement('span');
+    placeNameSpanElement.setAttribute('id', 'highlight');
+    placeNameSpanElement.textContent = `${place.name} `;
+    placeNameElement.appendChild(placeNameSpanElement);
+
+    const placeAddressElement = document.createElement('div');
+    placeAddressElement.classList.add("place-address");
+    placeAddressElement.textContent = place.formatted_address;
+
+    placeElement.appendChild(placeNameElement);
+    placeElement.appendChild(placeAddressElement);
+
+    return placeElement;
+  }
+
+  createMarker(place) {
+    const marker = new google.maps.Marker({
+      map: this.map,
+      title: place.name,
+      animation: google.maps.Animation.DROP,
+      position: place.geometry.location,
+    });
+  }
+
 }

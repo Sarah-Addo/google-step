@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 document.addEventListener("DOMContentLoaded", function() {
-  const map = new MyMap(document.getElementById('map'));
+  const map = new MyMap(document.getElementById('gyms-map'));
 });
 
 class MyMap {
@@ -103,3 +103,24 @@ class MyMap {
   }
 
 }
+
+google.charts.load('current', { packages: ['corechart'] });
+google.charts.setOnLoadCallback(() => {
+  // Define the chart to be drawn.
+  const data = new google.visualization.DataTable();
+  data.addColumn('string', 'Exercise');
+  data.addColumn('number', 'Percentage');
+  data.addRows([
+    ['Solitary aerobic (i.e treadmill, stationary bike)', 0.34],
+    ['Group aerobics (i.e jazzercise, zumba)', 0.15],
+    ['Team Sports', 0.09],
+    ['Weight training', .11],
+    ['Speciality training (i.e boxing)', .05],
+    ['Combination of exercises', .12],
+    ['None of the above', .14]
+  ]);
+
+  // Instantiate and draw the chart.
+  const chart = new google.visualization.PieChart(document.getElementById('exercise-chart'));
+  chart.draw(data, null);
+});

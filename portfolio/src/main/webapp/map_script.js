@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 document.addEventListener("DOMContentLoaded", function() {
-  const map = new MyMap(document.getElementById('map'));
+  const map = new MyMap(document.getElementById('gyms-map'));
 });
 
 class MyMap {
@@ -121,6 +121,6 @@ google.charts.setOnLoadCallback(() => {
   ]);
 
   // Instantiate and draw the chart.
-  const chart = new google.visualization.PieChart(document.getElementById('pie-chart'));
+  const chart = new google.visualization.PieChart(document.getElementById('exercise-chart'));
   chart.draw(data, null);
 });

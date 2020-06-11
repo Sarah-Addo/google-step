@@ -232,7 +232,7 @@
   width: 100%;
 }
 
-#map {
+#gyms-map {
   border: 1px solid #ccc;
   height: 100%;
   width: 90%;
@@ -270,7 +270,7 @@
   font-size: 36px;
 }
 
-#pie-chart {
+#exercise-chart {
   margin: 20px auto 20px auto;
   width:50%;
   height: 400px;

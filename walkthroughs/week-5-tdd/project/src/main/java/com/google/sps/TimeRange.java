@@ -46,8 +46,8 @@ public final class TimeRange {
     }
   };
 
-  private final int start;
-  private final int duration;
+  private int start;
+  private int duration;
 
   private TimeRange(int start, int duration) {
     this.start = start;
@@ -73,6 +73,10 @@ public final class TimeRange {
    */
   public int end() {
     return start + duration;
+  }
+
+  public void setStart(int start) {
+      this.start = start;
   }
 
   /**

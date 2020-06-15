@@ -25,8 +25,7 @@ public final class FindMeetingQuery {
     int duration = (int) request.getDuration();
     Set<String> attendees = new HashSet<String>(request.getAttendees());
     List<TimeRange> initalRanges = new ArrayList<TimeRange>();
-    List<TimeRange> result = new ArrayList<TimeRange>();
-    List<Event> eventsArr = events.toArray(new Event[events.size()]);
+    List<TimeRange> results = new ArrayList<TimeRange>();
     
     for(int start = 0; start <= TimeRange.END_OF_DAY; start += duration) {
         if(start + duration > TimeRange.END_OF_DAY) {
@@ -36,9 +35,8 @@ public final class FindMeetingQuery {
         }
     }
 
-    for(int i = 0; i < eventsArr.size(); i++) {
-        Event currEvent = eventsArr[i];
-        Set<String> currAttendees = new HashSet<String>(currEvent.getAttendees());
+    for(Event currEvent : events) {
+        Set<String> currAttendees = currEvent.getAttendees();
         for(String attendee : currAttendees) {
             if(attendees.contains(attendee)) {
                 blockTimeRange(initalRanges, currEvent);
@@ -47,10 +45,51 @@ public final class FindMeetingQuery {
         }
     }
 
-    return result;
+    int newRangeStart = -1;
+    int newRangeDuration = 0;
+
+// Group together the leftover time ranges for results
+    for(TimeRange range : initalRanges) {
+        boolean rangeIsInvalid = false;
+
+        //if the current range is invalid then start a new range
+        if(range.start() == -1) {
+            rangeIsInvalid = true;
+        }
+
+        //currRange is invalid and there was a previous valid range started
+        if(rangeIsInvalid && newRangeStart != -1) {
+            results.add(TimeRange.fromStartDuration(newRangeStart, newRangeDuration));
+            newRangeStart = -1;
+            newRangeDuration = 0;
+        }
+
+        //currRange is valid and there is a valid range in the works
+        if(!rangeIsInvalid && newRangeStart != -1) {
+            newRangeDuration += range.duration();
+        }
+
+        //currRange is valid and there is not a vaild range already in the works then start a valid range
+        if(!rangeIsInvalid && newRangeStart == -1) {
+            newRangeStart = range.start();
+            newRangeDuration += range.duration();
+        }
+
+        //If it is the last range of the initial ranges and there is a viable range in the works and
+        //the range duration statisfies the required duration then add it to results
+        if(range.end() == TimeRange.END_OF_DAY && newRangeStart != -1 && newRangeDuration >= duration) {
+            results.add(TimeRange.fromStartEnd(newRangeStart, TimeRange.END_OF_DAY, true));
+        }
+    }
+
+    return results;
   }
 
-  private void blockTimeRange(List<TimeRange> &initalRanges, Event event) {
-
-  }
+  public void blockTimeRange(List<TimeRange> ranges, Event event) {
+      for(TimeRange range : ranges) {
+          if(event.getWhen().overlaps(range)) {
+              range.setStart(-1);
+          }
+      }
+    }
 }

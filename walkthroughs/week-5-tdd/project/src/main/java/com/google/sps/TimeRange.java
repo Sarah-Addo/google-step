@@ -46,12 +46,14 @@ public final class TimeRange {
     }
   };
 
-  private int start;
-  private int duration;
+  private final int start;
+  private final int duration;
+  private boolean isValid;
 
   private TimeRange(int start, int duration) {
     this.start = start;
     this.duration = duration;
+    this.isValid = true;
   }
 
   /**
@@ -75,8 +77,11 @@ public final class TimeRange {
     return start + duration;
   }
 
-  public void setStart(int start) {
-      this.start = start;
+  public boolean isValid() {
+      return isValid;
+  }
+  public void setValid(boolean isValid) {
+      this.isValid = isValid;
   }
 
   /**

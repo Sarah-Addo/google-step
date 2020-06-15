@@ -50,27 +50,21 @@ public final class FindMeetingQuery {
 
 // Group together the leftover time ranges for results
     for(TimeRange range : initalRanges) {
-        boolean rangeIsInvalid = false;
 
-        //if the current range is invalid then start a new range
-        if(range.start() == -1) {
-            rangeIsInvalid = true;
-        }
-
-        //currRange is invalid and there was a previous valid range started
-        if(rangeIsInvalid && newRangeStart != -1) {
+        //range is invalid and there was a previous valid range started
+        if(!range.isValid() && newRangeStart != -1) {
             results.add(TimeRange.fromStartDuration(newRangeStart, newRangeDuration));
             newRangeStart = -1;
             newRangeDuration = 0;
         }
 
-        //currRange is valid and there is a valid range in the works
-        if(!rangeIsInvalid && newRangeStart != -1) {
+        //range is valid and there is a valid range in the works
+        if(range.isValid() && newRangeStart != -1) {
             newRangeDuration += range.duration();
         }
 
-        //currRange is valid and there is not a vaild range already in the works then start a valid range
-        if(!rangeIsInvalid && newRangeStart == -1) {
+        //range is valid and there is not a vaild range already in the works then start a valid range
+        if(range.isValid() && newRangeStart == -1) {
             newRangeStart = range.start();
             newRangeDuration += range.duration();
         }
@@ -88,7 +82,7 @@ public final class FindMeetingQuery {
   public void blockTimeRange(List<TimeRange> ranges, Event event) {
       for(TimeRange range : ranges) {
           if(event.getWhen().overlaps(range)) {
-              range.setStart(-1);
+              range.setValid(false);
           }
       }
     }

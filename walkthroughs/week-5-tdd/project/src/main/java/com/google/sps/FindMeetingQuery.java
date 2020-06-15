@@ -15,9 +15,42 @@
 package com.google.sps;
 
 import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    throw new UnsupportedOperationException("TODO: Implement this method.");
+    int duration = (int) request.getDuration();
+    Set<String> attendees = new HashSet<String>(request.getAttendees());
+    List<TimeRange> initalRanges = new ArrayList<TimeRange>();
+    List<TimeRange> result = new ArrayList<TimeRange>();
+    List<Event> eventsArr = events.toArray(new Event[events.size()]);
+    
+    for(int start = 0; start <= TimeRange.END_OF_DAY; start += duration) {
+        if(start + duration > TimeRange.END_OF_DAY) {
+            initalRanges.add(TimeRange.fromStartEnd(start, TimeRange.END_OF_DAY, false));
+        } else {
+            initalRanges.add(TimeRange.fromStartDuration(start, duration));
+        }
+    }
+
+    for(int i = 0; i < eventsArr.size(); i++) {
+        Event currEvent = eventsArr[i];
+        Set<String> currAttendees = new HashSet<String>(currEvent.getAttendees());
+        for(String attendee : currAttendees) {
+            if(attendees.contains(attendee)) {
+                blockTimeRange(initalRanges, currEvent);
+                break;
+            }
+        }
+    }
+
+    return result;
+  }
+
+  private void blockTimeRange(List<TimeRange> &initalRanges, Event event) {
+
   }
 }

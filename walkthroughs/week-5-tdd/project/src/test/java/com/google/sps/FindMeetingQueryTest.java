@@ -152,7 +152,7 @@ public final class FindMeetingQueryTest {
     // Have an event for each person, but have one person's event fully contain another's event. We
     // should see two options.
     //
-    // Events  :       |----A----|
+    // Events  :       |----A----|o
     //                   |--B--|
     // Day     : |---------------------|
     // Options : |--1--|         |--2--|

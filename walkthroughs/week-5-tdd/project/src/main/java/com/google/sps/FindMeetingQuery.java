@@ -26,12 +26,13 @@ public final class FindMeetingQuery {
     Set<String> attendees = new HashSet<String>(request.getAttendees());
     List<TimeRange> initalRanges = new ArrayList<TimeRange>();
     List<TimeRange> results = new ArrayList<TimeRange>();
+    final int minMeetingTime = 15;
     
-    for(int start = 0; start <= TimeRange.END_OF_DAY; start += 15) {
-        if(start + 15 > TimeRange.END_OF_DAY) {
+    for(int start = 0; start <= TimeRange.END_OF_DAY; start += minMeetingTime) {
+        if(start + minMeetingTime > TimeRange.END_OF_DAY) {
             initalRanges.add(TimeRange.fromStartEnd(start, TimeRange.END_OF_DAY, false));
         } else {
-            initalRanges.add(TimeRange.fromStartDuration(start, 15));
+            initalRanges.add(TimeRange.fromStartDuration(start, minMeetingTime));
         }
     }
 

@@ -152,7 +152,7 @@ public final class FindMeetingQueryTest {
     // Have an event for each person, but have one person's event fully contain another's event. We
     // should see two options.
     //
-    // Events  :      |----A----|
+    // Events  :       |----A----|
     //                   |--B--|
     // Day     : |---------------------|
     // Options : |--1--|         |--2--|
@@ -178,7 +178,7 @@ public final class FindMeetingQueryTest {
   public void doubleBookedPeople() {
     // Have one person, but have them registered to attend two events at the same time.
     //
-    // Events  :      |----A----|
+    // Events  :       |----A----|
     //                     |--A--|
     // Day     : |---------------------|
     // Options : |--1--|         |--2--|

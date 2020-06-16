@@ -22,7 +22,6 @@ import java.util.Set;
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    int duration = (int) request.getDuration();
     Set<String> attendees = new HashSet<String>(request.getAttendees());
     List<TimeRange> initalRanges = new ArrayList<TimeRange>();
     List<TimeRange> results = new ArrayList<TimeRange>();
@@ -48,12 +47,13 @@ public final class FindMeetingQuery {
 
     int newRangeStart = -1;
     int newRangeDuration = 0;
+    int duration = (int) request.getDuration();
 
 // Group together the leftover time ranges for results
     for(TimeRange range : initalRanges) {
 
         //range is invalid and there was a previous valid range started
-        if(!range.isValid() && newRangeStart != -1) {
+        if(!range.isSchedulable() && newRangeStart != -1) {
             if(newRangeDuration >= duration) {
             results.add(TimeRange.fromStartDuration(newRangeStart, newRangeDuration));
             }
@@ -62,12 +62,12 @@ public final class FindMeetingQuery {
         }
 
         //range is valid and there is a valid range in the works
-        if(range.isValid() && newRangeStart != -1) {
+        if(range.isSchedulable() && newRangeStart != -1) {
             newRangeDuration += range.duration();
         }
 
         //range is valid and there is not a vaild range already in the works then start a valid range
-        if(range.isValid() && newRangeStart == -1) {
+        if(range.isSchedulable() && newRangeStart == -1) {
             newRangeStart = range.start();
             newRangeDuration += range.duration();
         }
@@ -85,7 +85,7 @@ public final class FindMeetingQuery {
   public void blockTimeRange(List<TimeRange> ranges, Event event) {
       for(TimeRange range : ranges) {
           if(event.getWhen().overlaps(range)) {
-              range.setValid(false);
+              range.setSchedulable(false);
           }
       }
     }

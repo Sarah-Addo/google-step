@@ -46,28 +46,45 @@ public final class TimeRange {
     }
   };
 
-  private final int start;
-  private final int duration;
-  private boolean isValid;
+  private int start;
+  private int duration;
+  private boolean isSchedulable;
+  private boolean isValidRange;
 
   private TimeRange(int start, int duration) {
     this.start = start;
     this.duration = duration;
-    this.isValid = true;
+    this.isSchedulable = true;
+    this.isValidRange = true;
+  }
+
+  private TimeRange() {
+      this.start = 0;
+      this.duration = 0;
+      this.isSchedulable = false;
+      this.isValidRange = false;
   }
 
   /**
    * Returns the start of the range in minutes.
    */
-  public int start() {
+  public int getStart() {
     return start;
+  }
+
+  public void setStart(int start) {
+    this.start = start;
   }
 
   /**
    * Returns the number of minutes between the start and end.
    */
-  public int duration() {
+  public int getDuration() {
     return duration;
+  }
+
+  public void setDuration(int duration) {
+    this.duration = duration;
   }
 
   /**
@@ -77,11 +94,20 @@ public final class TimeRange {
     return start + duration;
   }
 
-  public boolean isValid() {
-      return isValid;
+  public boolean isSchedulable() {
+      return isSchedulable;
   }
-  public void setValid(boolean isValid) {
-      this.isValid = isValid;
+  
+  public void setSchedulable(boolean isSchedulable) {
+      this.isSchedulable = isSchedulable;
+  }
+
+  public boolean isValidRange() {
+      return isValidRange;
+  }
+
+  public void setValidRange(boolean isValidRange) {
+      this.isValidRange = isValidRange;
   }
 
   /**

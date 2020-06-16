@@ -58,7 +58,7 @@ public final class TimeRange {
     this.isValidRange = true;
   }
 
-  private TimeRange() {
+  public TimeRange() {
       this.start = 0;
       this.duration = 0;
       this.isSchedulable = false;

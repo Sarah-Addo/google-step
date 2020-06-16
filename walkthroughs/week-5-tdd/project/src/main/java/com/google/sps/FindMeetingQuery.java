@@ -45,37 +45,38 @@ public final class FindMeetingQuery {
         }
     }
 
-    int newRangeStart = -1;
-    int newRangeDuration = 0;
+    TimeRange tempRange = new TimeRange();
     int duration = (int) request.getDuration();
 
 // Group together the leftover time ranges for results
     for(TimeRange range : initalRanges) {
 
-        //range is invalid and there was a previous valid range started
-        if(!range.isSchedulable() && newRangeStart != -1) {
-            if(newRangeDuration >= duration) {
-            results.add(TimeRange.fromStartDuration(newRangeStart, newRangeDuration));
+        //range is not schedulable and there was a previous valid range started
+        if(!range.isSchedulable() && tempRange.isValidRange()) {
+            if(tempRange.getDuration() >= duration) {
+            results.add(TimeRange.fromStartDuration(tempRange.getStart(), tempRange.getDuration()));
             }
-            newRangeStart = -1;
-            newRangeDuration = 0;
+            tempRange.setValidRange(false);
+            tempRange.setStart(0);
+            tempRange.setDuration(0);
         }
 
-        //range is valid and there is a valid range in the works
-        if(range.isSchedulable() && newRangeStart != -1) {
-            newRangeDuration += range.duration();
+        //range is schedulable and there is a valid range in the works
+        if(range.isSchedulable() && tempRange.isValidRange()) {
+            tempRange.setDuration(tempRange.getDuration() + range.getDuration());
         }
 
-        //range is valid and there is not a vaild range already in the works then start a valid range
-        if(range.isSchedulable() && newRangeStart == -1) {
-            newRangeStart = range.start();
-            newRangeDuration += range.duration();
+        //range is schedulable and there is not a vaild range already in the works then start a valid range
+        if(range.isSchedulable() && !tempRange.isValidRange()) {
+            tempRange.setValidRange(true);
+            tempRange.setStart(range.getStart());
+            tempRange.setDuration(range.getDuration());
         }
 
         //If it is the last range of the initial ranges and there is a viable range in the works and
         //the range duration statisfies the required duration then add it to results
-        if(range.end() == TimeRange.END_OF_DAY && newRangeStart != -1 && newRangeDuration >= duration) {
-            results.add(TimeRange.fromStartEnd(newRangeStart, TimeRange.END_OF_DAY, true));
+        if(range.end() == TimeRange.END_OF_DAY && tempRange.isValidRange() && tempRange.getDuration() >= duration) {
+            results.add(TimeRange.fromStartEnd(tempRange.getStart(), TimeRange.END_OF_DAY, true));
         }
     }
 

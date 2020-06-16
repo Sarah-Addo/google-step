@@ -27,11 +27,11 @@ public final class FindMeetingQuery {
     List<TimeRange> initalRanges = new ArrayList<TimeRange>();
     List<TimeRange> results = new ArrayList<TimeRange>();
     
-    for(int start = 0; start <= TimeRange.END_OF_DAY; start += duration) {
-        if(start + duration > TimeRange.END_OF_DAY) {
+    for(int start = 0; start <= TimeRange.END_OF_DAY; start += 30) {
+        if(start + 30 > TimeRange.END_OF_DAY) {
             initalRanges.add(TimeRange.fromStartEnd(start, TimeRange.END_OF_DAY, false));
         } else {
-            initalRanges.add(TimeRange.fromStartDuration(start, duration));
+            initalRanges.add(TimeRange.fromStartDuration(start, 30));
         }
     }
 
@@ -53,7 +53,9 @@ public final class FindMeetingQuery {
 
         //range is invalid and there was a previous valid range started
         if(!range.isValid() && newRangeStart != -1) {
+            if(newRangeDuration >= duration) {
             results.add(TimeRange.fromStartDuration(newRangeStart, newRangeDuration));
+            }
             newRangeStart = -1;
             newRangeDuration = 0;
         }

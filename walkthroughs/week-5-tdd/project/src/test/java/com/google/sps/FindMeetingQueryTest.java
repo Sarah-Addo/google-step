@@ -152,7 +152,7 @@ public final class FindMeetingQueryTest {
     // Have an event for each person, but have one person's event fully contain another's event. We
     // should see two options.
     //
-    // Events  :       |----A----|o
+    // Events  :      |----A----|
     //                   |--B--|
     // Day     : |---------------------|
     // Options : |--1--|         |--2--|
@@ -184,7 +184,7 @@ public final class FindMeetingQueryTest {
     // Options : |--1--|         |--2--|
 
     Collection<Event> events = Arrays.asList(
-        new Event("Event 1", TimeRange.fromStartDuration(TIME_0830AM, DURATION_60_MINUTES),
+        new Event("Event 1", TimeRange.fromStartDuration(TIME_0830AM, DURATION_30_MINUTES),
             Arrays.asList(PERSON_A)),
         new Event("Event 2", TimeRange.fromStartDuration(TIME_0900AM, DURATION_30_MINUTES),
             Arrays.asList(PERSON_A)));
@@ -267,6 +267,29 @@ public final class FindMeetingQueryTest {
 
     Collection<TimeRange> actual = query.query(events, request);
     Collection<TimeRange> expected = Arrays.asList();
+
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void justEnoughRoomFor60Minutes() {
+    // Have a 60 minute meeting that fits between 00:00-8:30 and 9:30-24:00
+    //
+    // Events  : |--A----|   |----A----|
+    // Day     : |---------------------|
+    // Options :
+
+    Collection<Event> events = Arrays.asList(
+        new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0830AM, false),
+            Arrays.asList(PERSON_A)),
+        new Event("Event 2", TimeRange.fromStartEnd(TIME_0930AM, TimeRange.END_OF_DAY, true),
+            Arrays.asList(PERSON_A)));
+
+    MeetingRequest request = new MeetingRequest(Arrays.asList(PERSON_A), DURATION_60_MINUTES);
+
+    Collection<TimeRange> actual = query.query(events, request);
+        Collection<TimeRange> expected =
+        Arrays.asList(TimeRange.fromStartDuration(TIME_0830AM, DURATION_60_MINUTES));
 
     Assert.assertEquals(expected, actual);
   }

@@ -30,21 +30,21 @@ public final class FindMeetingQuery {
     //Creates a set of candidate blocks of time, excludes blocks not viable for new meeting,
     //then consolidates remaining blocks into ranges 
     for(int start = 0; start <= TimeRange.END_OF_DAY; start += minMeetingTime) {
-        if(start + minMeetingTime > TimeRange.END_OF_DAY) {
-            initalRanges.add(TimeRange.fromStartEnd(start, TimeRange.END_OF_DAY, /*inclusivie*/ false));
-        } else {
-            initalRanges.add(TimeRange.fromStartDuration(start, minMeetingTime));
-        }
+      if(start + minMeetingTime > TimeRange.END_OF_DAY) {
+          initalRanges.add(TimeRange.fromStartEnd(start, TimeRange.END_OF_DAY, /*inclusivie*/ false));
+      } else {
+          initalRanges.add(TimeRange.fromStartDuration(start, minMeetingTime));
+      }
     }
 
     for(Event currEvent : events) {
-        Set<String> currAttendees = currEvent.getAttendees();
-        for(String attendee : currAttendees) {
-            if(attendees.contains(attendee)) {
-                blockTimeRange(initalRanges, currEvent);
-                break;
-            }
+      Set<String> currAttendees = currEvent.getAttendees();
+      for(String attendee : currAttendees) {
+        if(attendees.contains(attendee)) {
+            blockTimeRange(initalRanges, currEvent);
+            break;
         }
+      }
     }
 
     TimeRange tempRange = new TimeRange();
@@ -53,20 +53,20 @@ public final class FindMeetingQuery {
 // Group together the leftover time ranges for results
     for(TimeRange range : initalRanges) {
 
-        //if range isn't valid then add tempRange to results then reset it
-        if(!range.getValidRange()) {
-            maybeAddToResults(tempRange, results, duration);
-            tempRange.setStart(0);
-            tempRange.setDuration(0);
-        }
+      //if range isn't valid then add tempRange to results then reset it
+      if(!range.hasPositiveDuration()) {
+        maybeAddToResults(tempRange, results, duration);
+        tempRange.setStart(0);
+        tempRange.setDuration(0);
+      }
 
-        //if range is valid then start a new tempRange if there was not one already
-        if(!tempRange.getValidRange() && range.getValidRange()) {
-            tempRange.setStart(range.getStart());
-            tempRange.setDuration(range.getDuration());
-        } else {
-            tempRange.setDuration(tempRange.getDuration() + range.getDuration());
-        }
+      //if range is valid then start a new tempRange if there was not one already
+      if(!tempRange.hasPositiveDuration() && range.hasPositiveDuration()) {
+        tempRange.setStart(range.getStart());
+        tempRange.setDuration(range.getDuration());
+      } else {
+        tempRange.setDuration(tempRange.getDuration() + range.getDuration());
+      }
     }
 
     //Add the last range to results if it is viable
@@ -76,18 +76,18 @@ public final class FindMeetingQuery {
   }
 
   public void blockTimeRange(List<TimeRange> ranges, Event event) {
-      for(TimeRange range : ranges) {
-          if(event.getWhen().overlaps(range)) {
-              range.setDuration(0);
-          }
+    for(TimeRange range : ranges) {
+      if(event.getWhen().overlaps(range)) {
+          range.setDuration(0);
       }
     }
+  }
 
   public void maybeAddToResults(TimeRange tempRange, List<TimeRange> results, int validDuration) {
-        if(tempRange.getEnd() == TimeRange.END_OF_DAY && tempRange.getDuration() >= validDuration) {
-            results.add(TimeRange.fromStartEnd(tempRange.getStart(), TimeRange.END_OF_DAY, /*inclusive*/ true));
-        } else if(tempRange.getDuration() >= validDuration) {
-            results.add(TimeRange.fromStartDuration(tempRange.getStart(), tempRange.getDuration()));
-        }
+    if(tempRange.getEnd() == TimeRange.END_OF_DAY && tempRange.getDuration() >= validDuration) {
+      results.add(TimeRange.fromStartEnd(tempRange.getStart(), TimeRange.END_OF_DAY, /*inclusive*/ true));
+    } else if(tempRange.getDuration() >= validDuration) {
+        results.add(TimeRange.fromStartDuration(tempRange.getStart(), tempRange.getDuration()));
+    }
   }
 }

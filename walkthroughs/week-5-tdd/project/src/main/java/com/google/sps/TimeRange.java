@@ -88,7 +88,7 @@ public final class TimeRange {
     return start + duration;
   }
 
-  public boolean getValidRange() {
+  public boolean hasPositiveDuration() {
       return duration > 0;
   }
 

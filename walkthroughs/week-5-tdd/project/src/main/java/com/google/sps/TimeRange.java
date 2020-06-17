@@ -42,27 +42,21 @@ public final class TimeRange {
   public static final Comparator<TimeRange> ORDER_BY_END = new Comparator<TimeRange>() {
     @Override
     public int compare(TimeRange a, TimeRange b) {
-      return Long.compare(a.end(), b.end());
+      return Long.compare(a.getEnd(), b.getEnd());
     }
   };
 
   private int start;
   private int duration;
-  private boolean isSchedulable;
-  private boolean isValidRange;
 
   private TimeRange(int start, int duration) {
     this.start = start;
     this.duration = duration;
-    this.isSchedulable = true;
-    this.isValidRange = true;
   }
 
   public TimeRange() {
       this.start = 0;
       this.duration = 0;
-      this.isSchedulable = false;
-      this.isValidRange = false;
   }
 
   /**
@@ -90,24 +84,12 @@ public final class TimeRange {
   /**
    * Returns the end of the range. This ending value is the closing exclusive bound.
    */
-  public int end() {
+  public int getEnd() {
     return start + duration;
   }
 
-  public boolean isSchedulable() {
-      return isSchedulable;
-  }
-  
-  public void setSchedulable(boolean isSchedulable) {
-      this.isSchedulable = isSchedulable;
-  }
-
-  public boolean isValidRange() {
-      return isValidRange;
-  }
-
-  public void setValidRange(boolean isValidRange) {
-      this.isValidRange = isValidRange;
+  public boolean getValidRange() {
+      return duration > 0;
   }
 
   /**

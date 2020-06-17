@@ -53,15 +53,14 @@ public final class FindMeetingQuery {
 // Group together the leftover time ranges for results
     for(TimeRange range : initalRanges) {
 
-        //range is not valid and there was a previous valid range started
+        //if range isn't valid then add tempRange to results then reset it
         if(!range.getValidRange()) {
             maybeAddToResults(tempRange, results, duration);
             tempRange.setStart(0);
             tempRange.setDuration(0);
         }
 
-        //range is valid and there is not a vaild tempRange already in the works then start a valid tempRange
-        //else add to tempRanges duration which does not have to be valid yet
+        //if range is valid then start a new tempRange if there was not one already
         if(!tempRange.getValidRange() && range.getValidRange()) {
             tempRange.setStart(range.getStart());
             tempRange.setDuration(range.getDuration());

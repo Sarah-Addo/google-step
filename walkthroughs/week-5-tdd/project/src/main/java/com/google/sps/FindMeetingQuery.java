@@ -51,6 +51,7 @@ public final class FindMeetingQuery {
     int duration = (int) request.getDuration();
 
 // Group together the leftover time ranges for results
+// A range with a non-positive duration signifies that it is a range that will not work for the request
     for(TimeRange range : initalRanges) {
 
       //if range isn't valid then add tempRange to results then reset it
@@ -58,10 +59,11 @@ public final class FindMeetingQuery {
         maybeAddToResults(tempRange, results, duration);
         tempRange.setStart(0);
         tempRange.setDuration(0);
+        continue;
       }
 
       //if range is valid then start a new tempRange if there was not one already
-      if(!tempRange.hasPositiveDuration() && range.hasPositiveDuration()) {
+      if(!tempRange.hasPositiveDuration()) {
         tempRange.setStart(range.getStart());
         tempRange.setDuration(range.getDuration());
       } else {

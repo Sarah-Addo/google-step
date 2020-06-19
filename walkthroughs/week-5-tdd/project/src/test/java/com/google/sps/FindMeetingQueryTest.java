@@ -69,7 +69,7 @@ public final class FindMeetingQueryTest {
   @Test
   public void noOptionsForTooLongOfARequest() {
     // The duration should be longer than a day. This means there should be no options.
-    int duration = TimeRange.WHOLE_DAY.duration() + 1;
+    int duration = TimeRange.WHOLE_DAY.getDuration() + 1;
     MeetingRequest request = new MeetingRequest(Arrays.asList(PERSON_A), duration);
 
     Collection<TimeRange> actual = query.query(NO_EVENTS, request);
@@ -270,5 +270,27 @@ public final class FindMeetingQueryTest {
 
     Assert.assertEquals(expected, actual);
   }
-}
 
+  @Test
+  public void justEnoughRoomFor60Minutes() {
+    // Have a 60 minute meeting that fits between 00:00-8:30 and 9:30-24:00
+    //
+    // Events  : |--A----|   |----A----|
+    // Day     : |---------------------|
+    // Options :
+
+    Collection<Event> events = Arrays.asList(
+        new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0830AM, false),
+            Arrays.asList(PERSON_A)),
+        new Event("Event 2", TimeRange.fromStartEnd(TIME_0930AM, TimeRange.END_OF_DAY, true),
+            Arrays.asList(PERSON_A)));
+
+    MeetingRequest request = new MeetingRequest(Arrays.asList(PERSON_A), DURATION_60_MINUTES);
+
+    Collection<TimeRange> actual = query.query(events, request);
+        Collection<TimeRange> expected =
+        Arrays.asList(TimeRange.fromStartDuration(TIME_0830AM, DURATION_60_MINUTES));
+
+    Assert.assertEquals(expected, actual);
+  }
+}

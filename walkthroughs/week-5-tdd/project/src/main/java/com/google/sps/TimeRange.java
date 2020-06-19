@@ -42,37 +42,54 @@ public final class TimeRange {
   public static final Comparator<TimeRange> ORDER_BY_END = new Comparator<TimeRange>() {
     @Override
     public int compare(TimeRange a, TimeRange b) {
-      return Long.compare(a.end(), b.end());
+      return Long.compare(a.getEnd(), b.getEnd());
     }
   };
 
-  private final int start;
-  private final int duration;
+  private int start;
+  private int duration;
 
   private TimeRange(int start, int duration) {
     this.start = start;
     this.duration = duration;
   }
 
+  public TimeRange() {
+      this.start = 0;
+      this.duration = 0;
+  }
+
   /**
    * Returns the start of the range in minutes.
    */
-  public int start() {
+  public int getStart() {
     return start;
+  }
+
+  public void setStart(int start) {
+    this.start = start;
   }
 
   /**
    * Returns the number of minutes between the start and end.
    */
-  public int duration() {
+  public int getDuration() {
     return duration;
+  }
+
+  public void setDuration(int duration) {
+    this.duration = duration;
   }
 
   /**
    * Returns the end of the range. This ending value is the closing exclusive bound.
    */
-  public int end() {
+  public int getEnd() {
     return start + duration;
+  }
+
+  public boolean hasPositiveDuration() {
+      return duration > 0;
   }
 
   /**
